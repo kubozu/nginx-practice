@@ -69,14 +69,28 @@ OpenSSL 3.1.3 19 Sep 2023 (Library: OpenSSL 3.1.3 19 Sep 2023)
    次のコマンドを使用して、プライベートキーを生成します。
 
 ```bash
-openssl genpkey -algorithm RSA -out private.key
+$ openssl genpkey -algorithm RSA -out ssl/private.key
 ```
 
 3. CSR（証明書署名要求）を生成する
    次のコマンドを使用して、CSR を生成します。Common Name（CN）の部分にワイルドカードドメインを指定します（例: `.example.com`）。
 
 ```bash
-openssl req -new -key private.key -out csr.pem
+$ openssl req -new -key ssl/private.key -out ssl/csr.pem
+-----
+Country Name (2 letter code) [AU]:JP
+State or Province Name (full name) [Some-State]:Sapporo
+Locality Name (eg, city) []:Chuo-Ku
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Sample
+Organizational Unit Name (eg, section) []:Web Sales
+Common Name (e.g. server FQDN or YOUR name) []:*.nginx-example.co.jp
+Email Address []:
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+
 ```
 
 このコマンドを実行すると、いくつかの質問が表示されます。必要事項を入力してください。Common Name には、ワイルドカードを含めたドメイン名を指定してください。
@@ -87,7 +101,7 @@ openssl req -new -key private.key -out csr.pem
    次のコマンドを使用して、自己署名証明書を生成します。
 
 ```bash
-openssl x509 -req -days 365 -in csr.pem -signkey private.key -out certificate.pem
+openssl x509 -req -days 3650 -in ssl/csr.pem -signkey ssl/private.key -out ssl/certificate.pem
 ```
 
-このコマンドでは、有効期限が 365 日の証明書が生成されます。必要に応じて、期限を変更してください。
+このコマンドでは、有効期限が 3650 日の証明書が生成されます。必要に応じて、期限を変更してください。
